@@ -15,16 +15,15 @@ namespace GamesWebAPI.Controllers {
 
 
         [HttpGet]
-        public async Task<IEnumerable<Game>> GetGames() => 
+        public async Task<IEnumerable<Game>> GetGames() =>
             await _dbContext.Games.ToListAsync();
 
 
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Game), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)] 
-        public async Task<IActionResult> GetByIdResult(int id)
-        {
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetByIdResult(int id) {
             var game = await _dbContext.Games.FindAsync(id);
             return game == null ? NotFound() : Ok(game);
         }
@@ -33,8 +32,7 @@ namespace GamesWebAPI.Controllers {
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult > CreatResult(Game game)
-        {
+        public async Task<IActionResult> CreatResult(Game game) {
             await _dbContext.Games.AddAsync(game);
             await _dbContext.SaveChangesAsync();
             return CreatedAtAction(nameof(GetByIdResult), new { id = game.Id }, game);
@@ -43,8 +41,7 @@ namespace GamesWebAPI.Controllers {
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Update(int id, Game game)
-        {
+        public async Task<IActionResult> Update(int id, Game game) {
             if (id != game.Id) return BadRequest();
 
             _dbContext.Update(game).State = EntityState.Modified;
@@ -55,13 +52,15 @@ namespace GamesWebAPI.Controllers {
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(int id)
-        {
+        public async Task<IActionResult> Delete(int id) {
             var game = await _dbContext.Games.FindAsync(id);
-            if(game == null) return NotFound();
+            if (game == null) return NotFound();
             _dbContext.Games.Remove(game);
             await _dbContext.SaveChangesAsync();
             return NoContent();
         }
     }
+
+
+
 }
