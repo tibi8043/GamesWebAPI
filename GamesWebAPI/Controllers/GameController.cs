@@ -12,13 +12,10 @@ namespace GamesWebAPI.Controllers {
     public class GameController : ControllerBase {
         private readonly GameDbContext _dbContext;
         public GameController(GameDbContext _dbContext) => this._dbContext = _dbContext;
-
-
+        
         [HttpGet]
         public async Task<IEnumerable<Game>> GetGames() =>
             await _dbContext.Games.ToListAsync();
-
-
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Game), StatusCodes.Status200OK)]
@@ -27,9 +24,7 @@ namespace GamesWebAPI.Controllers {
             var game = await _dbContext.Games.FindAsync(id);
             return game == null ? NotFound() : Ok(game);
         }
-
-
-
+        
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> CreatResult(Game game) {
@@ -60,7 +55,4 @@ namespace GamesWebAPI.Controllers {
             return NoContent();
         }
     }
-
-
-
 }
